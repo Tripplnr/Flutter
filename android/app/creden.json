@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "912173153696",
+    "project_id": "trippinr-1b782",
+    "storage_bucket": "trippinr-1b782.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912173153696:android:1e77c80474422982c5b8c5",
+        "android_client_info": {
+          "package_name": "com.trippinr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912173153696-j90si2sv2ec31jm31d4je544fcqd5rci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trippinr",
+            "certificate_hash": "fa01dc7720f09cbff5a156e5409d2cacd29a71d0"
+          }
+        },
+        {
+          "client_id": "912173153696-s6bh629kg0a2q4ko8ldm6pvrnotj5ia6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trippinr",
+            "certificate_hash": "889b1a0257297f7ca4c3b26a62b935f94341d885"
+          }
+        },
+        {
+          "client_id": "912173153696-ikgnu5surrikj0be6jk1eo55ue3qggmm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC-sjJMwtPHi5IRestyE7a8mGcOF4RLVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912173153696-asif7ojube17g5vfjjkl7c3nrijon010.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "912173153696-ckptv6q9sffcgcs5jk7390tkfo26avc5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.trippinr"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

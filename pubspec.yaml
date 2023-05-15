@@ -1,0 +1,131 @@
+name: trippinr
+description: 3.7.3
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.0 <3.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  cached_network_image: ^3.2.3
+  carousel_slider: ^4.2.1
+  connectivity_plus: ^3.0.3
+  dio: ^5.0.1
+  firebase_auth: ^4.2.9
+  device_preview: ^1.1.0
+  flutter:
+    sdk: flutter
+  #  google_maps_flutter: ^2.2.4
+  #  LOCATIONS & GPS
+  flutter_google_places:
+  flutter_html: ^3.0.0-alpha.6
+  flutter_login_facebook: ^1.5.0
+  flutter_rating_bar: ^4.0.1
+  flutter_staggered_grid_view: ^0.6.2
+  flutter_svg: ^2.0.1
+  flutter_typeahead: ^4.3.7
+  google_fonts: ^4.0.3
+  fluttertoast: ^8.2.1
+  geocoding: ^2.1.0
+  geolocator: ^9.0.2
+  get: ^4.6.5
+  flutter_map: ^3.1.0
+  get_storage: ^2.1.1
+  google_maps_flutter: ^2.2.5
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  google_sign_in: ^5.4.4
+  html: ^0.15.2
+  http:
+  images_picker: ^1.2.11
+  #  intl: ^0.18.0
+  intl: ^0.17.0
+  location:
+  # flutter_easyloading: ^3.0.5
+  lottie: ^2.2.0
+  permission_handler: ^10.2.0
+  persistent_bottom_nav_bar: ^5.0.2
+  pull_to_refresh: ^2.0.0
+  share_plus: ^6.3.1
+  shared_preferences: ^2.0.17
+  shimmer: ^2.0.0
+  sign_in_with_apple: ^4.3.0
+  simple_html_css: ^4.0.0
+  smooth_page_indicator: ^1.0.1
+  syncfusion_flutter_datepicker: ^20.4.50
+  url_launcher: ^6.1.10
+  webview_flutter: ^3.0.2
+  label_marker: ^1.0.1
+  flutter_secure_storage: ^8.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/PoppinsExtraLight.ttf
+          weight: 300
+        - asset: assets/fonts/PoppinsRegular.ttf
+          weight: 400
+        - asset: assets/fonts/PoppinsMedium.ttf
+          weight: 500
+        - asset: assets/fonts/PoppinsSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PoppinsBold.ttf
+          weight: 700
+    - family: Petit Formal Script
+      fonts:
+        - asset: assets/fonts/PetitFormalScriptRegular.ttf
+          weight: 400
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/InterBold.ttf
+          weight: 700
+    - family: Andale
+      fonts:
+        - asset: assets/fonts/ANDALEMO.ttf
+    - family: Book Antiqua
+      fonts:
+        - asset: assets/fonts/BookAntiquaFont.ttf
+    - family: Comic Sans MS
+      fonts:
+        - asset: assets/fonts/ComicSansMS3.ttf
+    - family: Helvitica
+      fonts:
+        - asset: assets/fonts/Helvetica.ttf
+    - family: Impact
+      fonts:
+        - asset: assets/fonts/impact.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Light.ttf
+    - family: Roboto-Regular
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+    - family: Merriweather
+      fonts:
+        - asset: assets/fonts/Merriweather-Light.ttf
+    - family: Merriweather-Regular
+      fonts:
+        - asset: assets/fonts/Merriweather-Regular.ttf
+    - family: Open-Sans
+      fonts:
+        - asset: assets/fonts/OpenSans.ttf
+    - family: Open-Sans-SemiBold
+      fonts:
+        - asset: assets/fonts/OpenSans-SemiBold.ttf
+          # weight: 700
+
