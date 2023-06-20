@@ -45,8 +45,8 @@ dependencies:
   html: ^0.15.2
   http:
   images_picker: ^1.2.11
-  #  intl: ^0.18.0
-  intl: ^0.17.0
+  intl: ^0.18.0
+#  intl: ^0.17.0
   location:
   # flutter_easyloading: ^3.0.5
   lottie: ^2.2.0
