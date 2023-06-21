@@ -130,8 +130,10 @@ class DestinationController extends GetxController {
   }
 
 // ! Filter
-  RxList<String> selectedOptions = <String>[].obs; // store selected options as observable list
-  RxList<String> selectedOptionsParking = <String>[].obs; // store selected options as observable list
+  RxList<String> selectedOptions =
+      <String>[].obs; // store selected options as observable list
+  RxList<String> selectedOptionsParking =
+      <String>[].obs; // store selected options as observable list
 
   // void selectOption(String text) {
   //   if (!selectedOptions.contains(text)) {
@@ -166,12 +168,14 @@ class DestinationController extends GetxController {
   bool isOptionSelectedParking(String text) {
     // parkingType.value = text;
 
-    return selectedOptionsParking.contains(text); // check if option exists in list
+    return selectedOptionsParking
+        .contains(text); // check if option exists in list
   }
 
   void selectOptionParking(String text) {
     if (!selectedOptionsParking.contains(text)) {
-      selectedOptionsParking.add(text); // add option if it doesn't exist in list
+      selectedOptionsParking
+          .add(text); // add option if it doesn't exist in list
       parkingType.value = text; // update parkingType value
     }
   }
@@ -208,11 +212,13 @@ class DestinationController extends GetxController {
     suggestionsList.clear();
     suggestionListTitle.clear();
     query.length == 0 ? recentAddressShow(true) : recentAddressShow(false);
-    final String baseURL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+    final String baseURL =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json';
     final String type = '(locality)';
     // final String type = '(regions)';
     // final String request = '$baseURL?input=$query&types=$type&key=AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg';
-    final String request = '$baseURL?input=$query&key=AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg';
+    final String request =
+        '$baseURL?input=$query&key=AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg';
     final response = await http.get(Uri.parse(request));
     final predictions = json.decode(response.body)['predictions'];
     final responseBody = json.decode(response.body);
@@ -220,9 +226,12 @@ class DestinationController extends GetxController {
     log(responseBody.toString());
     List<String> suggestions = [];
     for (var i = 0; i < predictions.length; i++) {
-      String name = "${predictions[i]['description']} ${predictions[i]['place_id']}";
+      String name =
+          "${predictions[i]['description']} ${predictions[i]['place_id']}";
 
-      var titleOne = predictions[i]['terms'].length < 2 ? "" : predictions[i]['terms'][1]["value"];
+      var titleOne = predictions[i]['terms'].length < 2
+          ? ""
+          : predictions[i]['terms'][1]["value"];
       String title = "${predictions[i]['terms'][0]["value"] ?? ""} $titleOne";
       log("title $title\ntitleOne $titleOne\n name $name");
       // "${predictions[i]['structured_formatting']['main_text']} ${predictions[i]['place_id']}";
@@ -281,7 +290,8 @@ class DestinationController extends GetxController {
               // double.parse(searchedHotelListLongitude[i].toStringAsFixed(4)),
               // double.parse(searchedHotelListLatitude[i].toStringAsFixed(4)),
               double.parse(searchedHotelList[i]["latitude"].toStringAsFixed(4)),
-              double.parse(searchedHotelList[i]["longitude"].toStringAsFixed(4)),
+              double.parse(
+                  searchedHotelList[i]["longitude"].toStringAsFixed(4)),
             ),
             backgroundColor: ColorConstant.yellow900,
             onTap: () {
@@ -313,7 +323,8 @@ class DestinationController extends GetxController {
     print("onFilter hotelList1 ${_userSessionController.hotelList.length}");
     print(" onFilter ==>>searchedHotelList2 ${searchedHotelList.length}");
 
-    // : null;
+    // ...
+
     if (propertyType != "" ||
         parkingRatingType != "" ||
         paymentOptionType != "" ||
@@ -322,171 +333,229 @@ class DestinationController extends GetxController {
         hotelClassType != "") {
       print("1111111111111111");
       filterListTemp.clear();
+
+      List<dynamic> temp_filtered_list = [];
       filterListTemp = searchedHotelList.where((e) {
-        // log("onFilter accomodationTypeName $propertyType ${e["accommodation_type_name"]} ${(propertyType.value == "Apartment" ? e["accommodation_type_name"] == "Apartment" : e["accommodation_type_name"] == "Hotel")}");
-        // log("onFilter parkingType $parkingType ${e["has_free_parking"]}  ${((parkingType.value == "Free") ? e["has_free_parking"] == 1 : e["has_free_parking"] == null ? e["has_free_parking"] == null : e["has_free_parking"] == 0)}");
-        log("onFilter cancellationType ${e['class']}");
-        // log("onFilter cancellationType $paymentOptionType  ${e["is_free_cancellable"]} ${(paymentOptionType == "Free Cancellation" ? e["is_free_cancellable"] == 1 : e["is_free_cancellable"] == 0)}");
-        // log("onFilter price $minPrice $maxPrice ${e['composite_price_breakdown']['all_inclusive_amount']['value']} ${((e['composite_price_breakdown']['all_inclusive_amount']['value'] >= minPrice.value) && (e['composite_price_breakdown']['all_inclusive_amount']['value'] <= maxPrice.value))}");
+        print('Value of E : ${e["accommodation_type_name"]}');
 
-        print("minValueR..${filterStartPrice.value} ");
 
-        print("maxValueR..${filterEndPrice.value} ");
+        bool isApartment = propertyType.value == "Apartment" && e["accommodation_type_name"] == "Apartment";
+        bool isHostel = propertyType.value == "Hostel" && e["accommodation_type_name"] == "Hostel";
+        bool isHotel = propertyType.value == "Hotel" && e["accommodation_type_name"] == "Hotel";
+        bool isVilla = propertyType.value == "Villa" && e["accommodation_type_name"] == "Villa";
 
-        // print("completteCheck${      curruncy.value.toUpperCase() !="USD"?
-        // (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value )).toStringAsFixed(0)) +
-        //     int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())* double.parse(usdExchangeRate.value )).toStringAsFixed(0))
-        // }")
-        //     >= filterStartPrice.value)
-        //     :
-        // (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) ).toStringAsFixed(0)) +
-        //     int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))
-        // }")
-        //     >= filterStartPrice.value)
-        //
-        //     &&    curruncy.value.toUpperCase() !="USD"?
-        // filterEndPrice.value != 0.0
-        // // ? (e['composite_price_breakdown']['all_inclusive_amount']['value'] <= filterEndPrice.value)
-        //     ? (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value )).toStringAsFixed(0)) +
-        //     int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())* double.parse(usdExchangeRate.value )).toStringAsFixed(0))
-        // }") <= filterEndPrice.value)
-        // // : (e['composite_price_breakdown']['all_inclusive_amount']['value'] <= 1000000))
-        //     : (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value )).toStringAsFixed(0)) +
-        //     int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())* double.parse(usdExchangeRate.value )).toStringAsFixed(0))
-        // }") <= 1000000)
-        //     :
-        //
-        // filterEndPrice.value != 0.0
-        //
-        //     ? (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) ).toStringAsFixed(0)) +
-        //     int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))
-        // }") <= filterEndPrice.value)
-        //
-        //     : (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) ).toStringAsFixed(0)) +
-        //     int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))
-        // }") <= 1000000)}");
+        bool isTypeMatched = (propertyType.value == "All") ||
+            (propertyType.value == "Apartment" && isApartment) ||
+            (propertyType.value == "Hostel" && isHostel) ||
+            (propertyType.value == "Hotel" && isHotel) ||
+            (propertyType.value == "Villa" && isVilla);
 
-        // log("onFilter rating ${e['review_score']} ${(parkingRatingType.value != "" ? e['review_score'] >= (double.parse(parkingRatingType.value)) : e['review_score'] >= 0.0)}");
-        print("2222222222222");
-        return (propertyType.value == "Apartment"
-                ? e["accommodation_type_name"] == "Apartment"
-                : e["accommodation_type_name"] != "Apartment") &&
-            (
-                // (e['composite_price_breakdown']['all_inclusive_amount']['value'] >= filterStartPrice.value) &&
-                (curruncy.value.toUpperCase() != "USD"
-                        ? (double.parse(
-                                "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") >=
-                            filterStartPrice.value)
-                        : (int.parse(
-                                "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") >=
-                            filterStartPrice.value)) &&
-                    (curruncy.value.toUpperCase() != "USD"
-                        ? (filterEndPrice.value != 0.0
-                            // ? (e['composite_price_breakdown']['all_inclusive_amount']['value'] <= filterEndPrice.value)
-                            ? (double.parse(
-                                    "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") <=
-                                filterEndPrice.value)
-                            // : (e['composite_price_breakdown']['all_inclusive_amount']['value'] <= 1000000))
-                            : (double.parse(
-                                    "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") <=
-                                1000000))
-                        : (filterEndPrice.value != 0.0
-                            ? (int.parse(
-                                    "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") <=
-                                filterEndPrice.value)
-                            : (int.parse(
-                                    "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") <=
-                                1000000)))) &&
-            ((parkingType.value == "Free") ? e["has_free_parking"] == 1 : e["has_free_parking"] != 2) &&
-            (hotelClassType.value != ""
-                ? e['class'] >= (double.parse(hotelClassType.value))
-                : e['class'] != null
-                    ? e['class'] >= 0.0
-                    : e['class'] != "")
-            // ? e["has_free_parking"] == null
-            // : e["has_free_parking"] == 0)
-            &&
-            (paymentOptionType == "Free Cancellation" ? e["is_free_cancellable"] == 1 : e["is_free_cancellable"] != 2) &&
-            (parkingRatingType.value != ""
-                ? double.parse(e['review_score']==null?"0.0":e['review_score'].toString()) >= (double.parse(parkingRatingType.value))
-                : e['review_score'] != null
-                    ? e['review_score'] >= 0.0
-                    : e['review_score'] != "");
+        bool isPriceMatched = (curruncy.value.toUpperCase() != "USD")
+            ? (double.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") >= filterStartPrice.value)
+            : (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") >= filterStartPrice.value);
+
+        bool isEndPriceMatched = (curruncy.value.toUpperCase() != "USD")
+            ? (filterEndPrice.value != 0.0
+            ? (double.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") <= filterEndPrice.value)
+            : (double.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") >= filterStartPrice.value))
+            : (filterEndPrice.value != 0.0
+            ? (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") <= filterEndPrice.value)
+            : (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") >= filterStartPrice.value));
+
+        bool isHotelClassMatched = (hotelClassType.value != "")
+            ? (e['hotel_class'] == int.parse(hotelClassType.value))
+            : true;
+
+        bool isParkingMatched = (parkingType.value != "")
+            ? (e['is_parking_available'] == (parkingType.value == "Yes"))
+            : true;
+
+        bool isParkingRatingMatched = (parkingRatingType.value != "")
+            ? (e['parking_rating'] == int.parse(parkingRatingType.value))
+            : true;
+
+        bool isPaymentOptionMatched = (paymentOptionType.value != "")
+            ? (e['is_payment_at_property_available'] == (paymentOptionType.value == "Yes"))
+            : true;
+
+        bool isMatched = isTypeMatched &&
+            isPriceMatched &&
+            isEndPriceMatched &&
+            isHotelClassMatched &&
+            isParkingMatched &&
+            isParkingRatingMatched &&
+            isPaymentOptionMatched;
+
+        if (isMatched) {
+          temp_filtered_list.add(e);
+        }
+        return isMatched;
       }).toList();
-      print("3333333333333");
-      print("onFilter ==>>filterListTemp ${filterListTemp.length}");
-      print("onFilter ==>>searchedHotelList3 ${searchedHotelList.length}");
-      // print("onFilter ==>>T ${searchedHotelListTemp}");
+
       searchedHotelList.clear();
-      print("onFilter ==>>searchedHotelList4 ${searchedHotelList.length}");
-
-      searchedHotelListLatitude.clear();
-      searchedHotelListLongitude.clear();
-      searchedHotelListTitle.clear();
-      searchedHotelListUrl.clear();
-      searchedHotelList.addAll(filterListTemp);
-      print("onFilter ==>>searchedHotelList5 ${searchedHotelList.length}");
-
-      searchedHotelList.forEach((element) {
-        print(element);
-        searchController.text = "";
-        searchedHotelListLatitude.add(element["longitude"]);
-        searchedHotelListLongitude.add(element["latitude"]);
-        searchedHotelListTitle.add(
-            // "${int.parse((double.parse(element['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) ).toStringAsFixed(0))}"
-            "${int.parse((element['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value']).toStringAsFixed(0)) + int.parse((element['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value']).toStringAsFixed(0))}");
-        searchedHotelListUrl.add(element["url"]);
-      });
-      loadMarkerIcon();
-      print("onFilter ==>>S ${searchedHotelList.length}");
-      print("onFilter ==>>T ${searchedHotelListLongitude.length}");
+      searchedHotelList.addAll(temp_filtered_list);
     }
-    // else {
-    //   filterListTemp.clear();
-    //   searchedHotelList.clear();
-    //   searchedHotelList.addAll(_userSessionController.hotelList);
 
-    //   filterListTemp = await searchedHotelList.where((e) {
-    //     print(e["is_free_cancellable"]);
-    //     print("onFilter ${e["is_free_cancellable"]}");
+    print("onFilter searchedHotelList3 ${searchedHotelList.length}");
 
-    //     return ((e['composite_price_breakdown']['all_inclusive_amount']
-    //                     ['value'] >=
-    //                 minPrice.value) &&
-    //             (e['composite_price_breakdown']['all_inclusive_amount']
-    //                     ['value'] <=
-    //                 maxPrice.value))
-    //         //      &&
-    //         // (e["is_free_cancellable"] == null
-    //         //     ? e["is_free_cancellable"]
-    //         //     : e["is_free_cancellable"] == 1);
-    //         ;
-    //   }).toList();
-
-    //   searchedHotelListLatitude.clear();
-    //   searchedHotelListLongitude.clear();
-    //   searchedHotelListTitle.clear();
-    //   searchedHotelListUrl.clear();
-    //   searchedHotelList.clear();
-    //   searchedHotelList.addAll(filterListTemp);
-
-    //   searchedHotelList.forEach((element) {
-    //     print(element);
-    //     searchController.text = "";
-    //     searchedHotelListLatitude.add(element["longitude"]);
-    //     searchedHotelListLongitude.add(element["latitude"]);
-    //     searchedHotelListTitle.add(
-    //         "${element["composite_price_breakdown"]['all_inclusive_amount']["currency"]} ${(element["composite_price_breakdown"]['all_inclusive_amount']["value"]).toStringAsFixed(0)}");
-    //     searchedHotelListUrl.add(element["url"]);
-    //   });
-    //   loadMarkerIcon();
-    //   print("onFilter");
-    //   print("onFilter ==>>S ${searchedHotelList.length}");
-    //   print("onFilter ==>>T ${searchedHotelListLongitude.length}");
-
-    //   // return searchedHotelList;
-    // }
+    return searchedHotelList;
   }
+
+
+  // Future onFilter(context) async {
+  //   print("0000000000");
+  //   searchedHotelList.clear();
+  //
+  //   print(" onFilter ==>>searchedHotelList1 ${searchedHotelList.length}");
+  //
+  //   List filterListTemp = [];
+  //
+  //   searchedHotelList.addAll(_userSessionController.hotelList);
+  //   print("onFilter hotelList1 ${_userSessionController.hotelList.length}");
+  //   print(" onFilter ==>>searchedHotelList2 ${searchedHotelList.length}");
+  //
+  //   // : null;
+  //   if (propertyType != "" ||
+  //       parkingRatingType != "" ||
+  //       paymentOptionType != "" ||
+  //       parkingType != "" ||
+  //       filterEndPrice != 0.0 ||
+  //       hotelClassType != "") {
+  //     print("1111111111111111");
+  //     filterListTemp.clear();
+  //     // print('Value of E: ${e["accommodation_type_name"] == propertyType.value}');
+  //
+  //     // filterListTemp = searchedHotelList.where((e) {
+  //     //   // if(e[])
+  //     //   print('Printing value of e: ${e['accommodation_type_name']}');
+  //     //   return (propertyType.value == "Apartment"
+  //     //           ? e["accommodation_type_name"] == "Apartment"
+  //     //           : e["accommodation_type_name"] != "Apartment") && (
+  //     //           // (e['composite_price_breakdown']['all_inclusive_amount']['value'] >= filterStartPrice.value) &&
+  //     //           (curruncy.value.toUpperCase() != "USD"
+  //     //                   ? (double.parse(
+  //     //                           "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") >=
+  //     //                       filterStartPrice.value)
+  //     //                   : (int.parse(
+  //     //                           "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") >=
+  //     //                       filterStartPrice.value)) &&
+  //     //               (curruncy.value.toUpperCase() != "USD"
+  //     //                   ? (filterEndPrice.value != 0.0
+  //     //                       // ? (e['composite_price_breakdown']['all_inclusive_amount']['value'] <= filterEndPrice.value)
+  //     //                       ? (double.parse(
+  //     //                               "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") <=
+  //     //                           filterEndPrice.value)
+  //     //                       // : (e['composite_price_breakdown']['all_inclusive_amount']['value'] <= 1000000))
+  //     //                       : (double.parse(
+  //     //                               "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") <=
+  //     //                           1000000))
+  //     //                   : (filterEndPrice.value != 0.0
+  //     //                       ? (int.parse(
+  //     //                               "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") <=
+  //     //                           filterEndPrice.value)
+  //     //                       : (int.parse(
+  //     //                               "${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") <=
+  //     //                           1000000)))) &&
+  //     //       ((parkingType.value == "Free")
+  //     //           ? e["has_free_parking"] == 1
+  //     //           : e["has_free_parking"] != 2) &&
+  //     //       (hotelClassType.value != ""
+  //     //           ? e['class'] >= (double.parse(hotelClassType.value))
+  //     //           : e['class'] != null
+  //     //               ? e['class'] >= 0.0
+  //     //               : e['class'] != "")
+  //     //       // ? e["has_free_parking"] == null
+  //     //       // : e["has_free_parking"] == 0)
+  //     //       &&
+  //     //       (paymentOptionType == "Free Cancellation"
+  //     //           ? e["is_free_cancellable"] == 1
+  //     //           : e["is_free_cancellable"] != 2) &&
+  //     //       (parkingRatingType.value != ""
+  //     //           ? double.parse(e['review_score'] == null
+  //     //                   ? "0.0"
+  //     //                   : e['review_score'].toString()) >=
+  //     //               (double.parse(parkingRatingType.value))
+  //     //           : e['review_score'] != null
+  //     //               ? e['review_score'] >= 0.0
+  //     //               : e['review_score'] != "");
+  //     // }).toList();
+  //     List<dynamic> temp_filtered_list = [];
+  //     filterListTemp = searchedHotelList.where((e) {
+  //       // print('Value of E: ${e["accommodation_type_name"]   +  propertyType.value}');
+  //       // if(e["accommodation_type_name"] == 'Villa'){
+  //       //   temp_filtered_list.add(e);
+  //       // }
+  //
+  //
+  //
+  //       bool isApartment = propertyType.value == "Apartment" && e["accommodation_type_name"] == "Apartment";
+  //       bool isHostel = propertyType.value == "Hostel" && e["accommodation_type_name"] == "Hostel";
+  //       bool isHotel = propertyType.value == "Hotel" && e["accommodation_type_name"] == "Hotel";
+  //       bool isVilla = propertyType.value == "Villa" && e["accommodation_type_name"] == "Villa";
+  //
+  //       bool isTypeMatched = (propertyType.value == "Apartment" && isApartment) ||
+  //           (propertyType.value == "Hostel" && isHostel) ||
+  //           (propertyType.value == "Hotel" && isHotel) ||
+  //           (propertyType.value == "Villa" && isVilla);
+  //
+  //
+  //       bool isPriceMatched = (curruncy.value.toUpperCase() != "USD")
+  //           ? (double.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") >= filterStartPrice.value)
+  //           : (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") >= filterStartPrice.value);
+  //
+  //       bool isEndPriceMatched = (curruncy.value.toUpperCase() != "USD")
+  //           ? (filterEndPrice.value != 0.0
+  //           ? (double.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") <= filterEndPrice.value)
+  //           : (double.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString()) * double.parse(usdExchangeRate.value)).toStringAsFixed(0))}") <= 1000000))
+  //           : (filterEndPrice.value != 0.0
+  //           ? (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") <= filterEndPrice.value)
+  //           : (int.parse("${int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(e['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}") <= 1000000));
+  //
+  //       bool hasFreeParking = (parkingType.value == "Free") ? e["has_free_parking"] == 1 : e["has_free_parking"] != 2;
+  //
+  //       bool hasValidHotelClass = (hotelClassType.value != "")
+  //           ? e['class'] != null && e['class'] >= double.parse(hotelClassType.value)
+  //           : e['class'] != null || e['class'] == 0.0;
+  //
+  //       bool hasFreeCancellation = (paymentOptionType == "Free Cancellation") ? e["is_free_cancellable"] == 1 : e["is_free_cancellable"] != 2;
+  //
+  //       bool hasValidParkingRating = (parkingRatingType.value != "")
+  //           ? e['review_score'] != null && double.parse(e['review_score'].toString()) >= double.parse(parkingRatingType.value)
+  //           : e['review_score'] != null || e['review_score'] == 0.0;
+  //
+  //       return isTypeMatched && isPriceMatched && isEndPriceMatched && hasFreeParking && hasValidHotelClass && hasFreeCancellation && hasValidParkingRating;
+  //     }).toList();
+  //     // print('New Filtered List Length: ${temp_filtered_list.length}');
+  //
+  //     // print("3333333333333");
+  //     // print("onFilter ==>>filterListTemp ${filterListTemp.length}");
+  //     // print("onFilter ==>>searchedHotelList3 ${searchedHotelList.length}");
+  //     // print("onFilter ==>>T ${searchedHotelListTemp}");
+  //     searchedHotelList.clear();
+  //     print("onFilter ==>>searchedHotelList4 ${searchedHotelList.length}");
+  //
+  //     searchedHotelListLatitude.clear();
+  //     searchedHotelListLongitude.clear();
+  //     searchedHotelListTitle.clear();
+  //     searchedHotelListUrl.clear();
+  //     searchedHotelList.addAll(filterListTemp);
+  //     // print("onFilter ==>>searchedHotelList5 ${searchedHotelList.length}");
+  //
+  //     searchedHotelList.forEach((element) {
+  //       print(element);
+  //       searchController.text = "";
+  //       searchedHotelListLatitude.add(element["longitude"]);
+  //       searchedHotelListLongitude.add(element["latitude"]);
+  //       searchedHotelListTitle.add(
+  //           // "${int.parse((double.parse(element['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString()) ).toStringAsFixed(0))}"
+  //           "${int.parse((element['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value']).toStringAsFixed(0)) + int.parse((element['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value']).toStringAsFixed(0))}");
+  //       searchedHotelListUrl.add(element["url"]);
+  //     });
+  //     loadMarkerIcon();
+  //     // print("onFilter ==>>S ${searchedHotelList.length}");
+  //     // print("onFilter ==>>T ${searchedHotelListLongitude.length}");
+  //   }
+  // }
 
   resetParkingType() {
     print("aljskhf");
@@ -504,8 +573,6 @@ class DestinationController extends GetxController {
   }
 
   resetPaymentOption() {
-    print("aljskhhkf");
-
     paymentOptionType.value = "";
     selectedOptions.clear();
   }
@@ -560,7 +627,11 @@ class DestinationController extends GetxController {
     if (hotelController.sortSelect.value == 'Recommended') {
       // sortedHotels.sort((a, b) => b.distance.compareTo(a.distance));
       // sortedHotels.sort((a, b) => a["review_score"].compareTo(b["review_score"]));
-      sortedHotels.sort((a, b) => double.parse(a["review_score"]==null?"0.0":a["review_score"].toString()).compareTo(double.parse(b["review_score"]==null?"0.0":b["review_score"].toString())));
+      sortedHotels.sort((a, b) => double.parse(
+              a["review_score"] == null ? "0.0" : a["review_score"].toString())
+          .compareTo(double.parse(b["review_score"] == null
+              ? "0.0"
+              : b["review_score"].toString())));
       // sortedHotels
       //     .sort((a, b) => a.reviewScoreWord.compareTo(b.reviewScoreWord));
     } else if (hotelController.sortSelect.value == 'Price (High to Low)') {
@@ -591,10 +662,14 @@ class DestinationController extends GetxController {
                   "${int.parse((double.parse(b['composite_price_breakdown']['product_price_breakdowns'][0]['net_amount']['value'].toString())).toStringAsFixed(0)) + int.parse((double.parse(b['composite_price_breakdown']['product_price_breakdowns'][0]['included_taxes_and_charges_amount']['value'].toString())).toStringAsFixed(0))}")));
     } else if (hotelController.sortSelect.value == 'Reviews') {
       // sortedHotels.sort((a, b) => b["review_score"].compareTo(a["review_score"]));
-      sortedHotels.sort((a, b) => double.parse(b["review_score"]==null?"0.0":b["review_score"].toString()).compareTo(double.parse(a["review_score"]==null?"0.0":a["review_score"].toString())));
-
+      sortedHotels.sort((a, b) => double.parse(
+              b["review_score"] == null ? "0.0" : b["review_score"].toString())
+          .compareTo(double.parse(a["review_score"] == null
+              ? "0.0"
+              : a["review_score"].toString())));
     } else if (hotelController.sortSelect.value == 'Distance (Near to Far)') {
-      sortedHotels.sort((a, b) => double.parse(a['distance_to_cc']).compareTo(double.parse(b['distance_to_cc'])));
+      sortedHotels.sort((a, b) => double.parse(a['distance_to_cc'])
+          .compareTo(double.parse(b['distance_to_cc'])));
       // sortedHotels.sort((a, b) => a.distance.compareTo(b.distance));
     }
     //  else {
@@ -631,9 +706,16 @@ class DestinationController extends GetxController {
     var startDateTemp = DateTime.now().format('E, d MMM').toString();
 
     selectedStartDate.value = DateTime.now().format('yyyy-MM-dd').toString();
-    selectedEndDate.value = DateTime.now().add(const Duration(days: 2)).format('yyyy-MM-dd').toString();
-    endDate.value = DateTime.now().add(const Duration(days: 2)).format('d MMM').toString();
-    var endDateTemp = DateTime.now().add(const Duration(days: 2)).format('E, d MMM').toString();
+    selectedEndDate.value = DateTime.now()
+        .add(const Duration(days: 2))
+        .format('yyyy-MM-dd')
+        .toString();
+    endDate.value =
+        DateTime.now().add(const Duration(days: 2)).format('d MMM').toString();
+    var endDateTemp = DateTime.now()
+        .add(const Duration(days: 2))
+        .format('E, d MMM')
+        .toString();
     print("initialDateRange ${startDate.value} - ${endDate.value}");
     range.value = "${startDate.value}-${endDate.value}";
     rangeHotelList.value = "${startDateTemp}-${endDateTemp}";
@@ -796,7 +878,8 @@ class DestinationController extends GetxController {
       print("checkkkkl00");
       log("r====>>>>>${response['result']}");
       print("checkkkkl001");
-      PopularHotelModel _popularHotelModel = PopularHotelModel.fromJson(response);
+      PopularHotelModel _popularHotelModel =
+          PopularHotelModel.fromJson(response);
       if (searchController.value != "") {
         searchController.clear();
         placesIDNEW.value = "";
@@ -814,10 +897,17 @@ class DestinationController extends GetxController {
         searchedHotelListTemp = List.from(response['result']);
         print("checkkkklppppppppp111");
         print(searchedHotelListTemp.length);
-        searchedHotelListTemp.sort((a, b) => double.parse(b["review_score"]==null?"0.0":b["review_score"].toString()).compareTo(double.parse(a["review_score"]==null?"0.0":a["review_score"].toString())));
+        searchedHotelListTemp.sort((a, b) => double.parse(
+                b["review_score"] == null
+                    ? "0.0"
+                    : b["review_score"].toString())
+            .compareTo(double.parse(a["review_score"] == null
+                ? "0.0"
+                : a["review_score"].toString())));
         print("checkkkklppppppppp222");
-        searchedHotelListTemp.removeWhere(
-            (element) => element["country_trans"].toString().toLowerCase() != countryValueOfSearchedLocation.value.toLowerCase());
+        searchedHotelListTemp.removeWhere((element) =>
+            element["country_trans"].toString().toLowerCase() !=
+            countryValueOfSearchedLocation.value.toLowerCase());
         print("checkkkklppppppppp3333");
         // for(var a in searchedHotelList){
         //   if(a["country_trans"].toString().toLowerCase() != countryValueOfSearchedLocation.value.toLowerCase()){
@@ -831,15 +921,21 @@ class DestinationController extends GetxController {
         print("checkkkkl");
         print(searchedHotelList.length);
 
-
         searchedHotelList.clear();
         print("checkkkkl1111111");
         print(searchedHotelList.length);
         searchedHotelList.value = response['result'];
-        searchedHotelList.value.sort((a, b) => double.parse(b["review_score"]==null?"0.0":b["review_score"].toString()).compareTo(double.parse(a["review_score"]==null?"0.0":a["review_score"].toString())));
+        searchedHotelList.value.sort((a, b) => double.parse(
+                b["review_score"] == null
+                    ? "0.0"
+                    : b["review_score"].toString())
+            .compareTo(double.parse(a["review_score"] == null
+                ? "0.0"
+                : a["review_score"].toString())));
         print("checkkkklqqqqqqqqqqqqqq");
-        searchedHotelList.value.removeWhere(
-            (element) => element["country_trans"].toString().toLowerCase() != countryValueOfSearchedLocation.value.toLowerCase());
+        searchedHotelList.value.removeWhere((element) =>
+            element["country_trans"].toString().toLowerCase() !=
+            countryValueOfSearchedLocation.value.toLowerCase());
         curruncy.value = searchedHotelList.value[0]["currencycode"];
         print("curruncyCode.. ${curruncy.value}");
         if (curruncy.value.toUpperCase() != "USD") {
@@ -847,8 +943,9 @@ class DestinationController extends GetxController {
         }
 
         var ttt = response['result'];
-        ttt.removeWhere(
-            (element) => element["country_trans"].toString().toLowerCase() != countryValueOfSearchedLocation.value.toLowerCase());
+        ttt.removeWhere((element) =>
+            element["country_trans"].toString().toLowerCase() !=
+            countryValueOfSearchedLocation.value.toLowerCase());
 
         _userSessionController.setHotelList(List.from(ttt));
         var similarHotel = [];
@@ -870,7 +967,8 @@ class DestinationController extends GetxController {
         searchedHotelListTitle.clear();
         searchedHotelListUrl.clear();
         searchedHotelList.forEach((element) {
-          print("hellllo ${element['review_score']} ${element['review_score_word']}");
+          print(
+              "hellllo ${element['review_score']} ${element['review_score_word']}");
           // log();
           searchController.text = "";
           searchedHotelListLatitude.add(element["longitude"]);
@@ -947,8 +1045,9 @@ class DestinationController extends GetxController {
         log("response['result']");
         log("r====>>>>>${response['result']}");
         // if(response['result']!=[]) {
-        response['result'].removeWhere(
-            (element) => element["country_trans"].toString().toLowerCase() != countryValueOfSearchedLocation.value.toLowerCase());
+        response['result'].removeWhere((element) =>
+            element["country_trans"].toString().toLowerCase() !=
+            countryValueOfSearchedLocation.value.toLowerCase());
 
         // for (var a in response['result']) {
         //   // searchedHotelListTemp.add(a);
@@ -967,7 +1066,8 @@ class DestinationController extends GetxController {
 
         searchedHotelList.value.addAll(response['result']);
         searchedHotelList.value.forEach((element) {
-          print("hellllo ${element['review_score']} ${element['review_score_word']}");
+          print(
+              "hellllo ${element['review_score']} ${element['review_score_word']}");
           // log();
           searchController.text = "";
 

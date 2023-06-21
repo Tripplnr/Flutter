@@ -289,7 +289,7 @@ class HotelHelperMethods {
                     ],
                   ),
                   SizedBox(height: 10),
-
+ // TODO: Need changes here.
                   Wrap(
                     children: [
                       Obx(() {
@@ -302,6 +302,14 @@ class HotelHelperMethods {
                       SizedBox(width: 10),
                       Obx(() {
                         return propertyTypeList("Apartment", _destinationController.propertyType.value == "Apartment");
+                      }),
+                      SizedBox(width: 10),
+                      Obx(() {
+                        return propertyTypeList("Hostel", _destinationController.propertyType.value == "Hostel");
+                      }),
+                      SizedBox(width: 10),
+                      Obx(() {
+                        return propertyTypeList("Villa", _destinationController.propertyType.value == "Villa");
                       }),
                     ],
                   ),
