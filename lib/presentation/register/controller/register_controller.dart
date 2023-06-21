@@ -23,8 +23,7 @@ class RegisterController extends GetxController {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   var apiClient = ApiClient();
-  onTapRegister(
-      {String? firstName, String? lastName, String? email, String? password}) {
+  onTapRegister({String? firstName, String? lastName, String? email, String? password}) {
     if (formKey.currentState!.validate()) {
       signUpApi(
               firstName: firstName,
